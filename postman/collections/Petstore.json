@@ -192,6 +192,20 @@
 		},
 		{
 			"name": "Delete pet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f2ec7d69-5154-49dc-805d-488c79c5b525",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"id": "ca3db280-f5ac-4926-9ad7-623600ba2a41",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true

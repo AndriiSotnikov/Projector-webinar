@@ -1,0 +1,304 @@
+{
+	"info": {
+		"_postman_id": "21ce0c5d-20b1-4b2f-8ff2-918407b8851b",
+		"name": "Petstore",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "2077884-21ce0c5d-20b1-4b2f-8ff2-918407b8851b"
+	},
+	"item": [
+		{
+			"name": "Create New Pet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b0e362ca-c45b-40fd-928c-366f436b1b8f",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "95b84ce5-2297-415f-918c-91996ef9553a",
+						"exec": [
+							"const min = 1000;",
+							"const max = 10000;",
+							"",
+							"const randomInteger = Math.floor(Math.random() * (max - min + 1)) + min;",
+							"",
+							"console.log(randomInteger);",
+							"pm.environment.set(\"PetID\", randomInteger);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "bde2683e-0306-44df-91da-db671206726d",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/xml"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": {{PetID}},\n    \"name\": \"doggieName13\",\n    \"category\": {\n        \"id\": 1,\n        \"name\": \"Dogs\"\n    },\n    \"photoUrls\": [\n        \"string\"\n    ],\n    \"tags\": [\n        {\n            \"id\": 0,\n            \"name\": \"string\"\n        }\n    ],\n    \"status\": \"available\"\n}"
+				},
+				"url": {
+					"raw": "{{url_pet}}/api/v3/pet",
+					"host": [
+						"{{url_pet}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"pet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify pet was created",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "c198253e-a9c4-477f-b7bf-3276f57d3a8d",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "d9c6813c-00b9-4f36-96bf-12fdc14f63a2",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "37c05bf8-c1a0-4156-95c1-5f2df6cecd21",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/xml"
+					}
+				],
+				"url": {
+					"raw": "{{url_pet}}/api/v3/pet/{{PetID}}",
+					"host": [
+						"{{url_pet}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"pet",
+						"{{PetID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change pet's name",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "4567b97a-3cf4-4392-a49f-fc30c0b34c90",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "2d56f1ee-a9fc-4040-ba2c-2fba378eba87",
+						"exec": [
+							"var json_response = xml2Json(responseBody);",
+							"",
+							"console.log(json_response.Pet.name);",
+							"",
+							"pm.test(\"Verify the name was changed\", function () {",
+							"    pm.expect(json_response.Pet.name).to.eql(\"doggieNameNew\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "6fdb60d0-f434-4d0f-b08f-602d6748cc43",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/xml"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": {{PetID}},\n  \"name\": \"doggieNameNew\",\n  \"category\": {\n    \"id\": 1,\n    \"name\": \"Dogs\"\n  },\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ],\n  \"status\": \"available\"\n}"
+				},
+				"url": {
+					"raw": "{{url_pet}}/api/v3/pet",
+					"host": [
+						"{{url_pet}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"pet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete pet",
+			"id": "ca3db280-f5ac-4926-9ad7-623600ba2a41",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					}
+				],
+				"url": {
+					"raw": "{{url_pet}}/api/v3/pet/{{PetID}}",
+					"host": [
+						"{{url_pet}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"pet",
+						"{{PetID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "82abd28f-1c81-4e3e-91e5-325eb8b40ca2",
+						"exec": [
+							"var customCookie = 'custom_cookie=value';",
+							"pm.request.headers.add({ key: 'Cookie', value: customCookie});",
+							"",
+							"pm.collectionVariables.set(\"customCookie\", customCookie);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "9bc16960-e06c-4991-8cd2-14d42fc58277",
+						"exec": [
+							"pm.test(\"Response contains custom_cookie\", function () {",
+							"    pm.expect(pm.response.headers.has('Cookie'));",
+							"});",
+							"",
+							"var cookieValue = pm.request.headers.get('Cookie');",
+							"",
+							"",
+							"pm.test(\"cookieValue contains text\", function () {",
+							"    pm.expect(cookieValue).to.include(pm.collectionVariables.get(\"customCookie\"));",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "7ee7c78e-c1fc-4d2a-b47a-f0d4f782be5d",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "8NAWDIDYJQR6GWFP7A4V8IG6FIFC7STP",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "164.92.218.36:8080/api",
+					"host": [
+						"164",
+						"92",
+						"218",
+						"36"
+					],
+					"port": "8080",
+					"path": [
+						"api"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"id": "6eb51fd3-28c2-4b1d-8356-3205c68fcc19",
+			"key": "variable_key",
+			"value": ""
+		},
+		{
+			"id": "fa75a185-ab51-4999-b9b1-06168efc9a11",
+			"key": "customCookie",
+			"value": ""
+		}
+	]
+}
